@@ -1,4 +1,3 @@
-require("dotenv").config();
 const Bytez = require("bytez.js");
 
 const sdk = new Bytez(process.env.BYTEZ_API_KEY);
@@ -20,7 +19,6 @@ module.exports = async (req, res) => {
     const labels = output.map(obj => obj.label);
     return res.json({ status: true, labels });
   } catch (err) {
-    console.error(err);
     return res.status(500).json({ status: false, error: err.message });
   }
 };
