@@ -4,56 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Object Detector</title>
-  <link rel="stylesheet" href="public/style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="container">
     <h1>AI Object Detector</h1>
-    <p>You can make Image URL in <a href="https://imgbb.com/">ImgBB</a>.</p>
+    <p>Enter an image URL and detect objects instantly!</p>
 
     <div class="input-group">
       <input type="text" id="imageUrl" placeholder="Enter Image URL" />
-      <button onclick="detectObjects()">Detect</button>
+      <button onclick="detectObject()">Detect</button>
     </div>
 
-    <div class="output">
-      <h2>Detection Result:</h2>
-      <ul id="results"></ul>
-    </div>
+    <div id="preview"></div>
+    <div class="output" id="output"></div>
   </div>
 
   <footer>
     Powered by <span>Raqkid505</span>
   </footer>
 
-  <script>
-    async function detectObjects() {
-      const imageUrl = document.getElementById("imageUrl").value.trim();
-      const resultsList = document.getElementById("results");
-      resultsList.innerHTML = "";
-
-      if (!imageUrl) {
-        resultsList.innerHTML = "<li>Please enter an image URL.</li>";
-        return;
-      }
-
-      try {
-        const res = await fetch(`/api/detect?imageUrl=${encodeURIComponent(imageUrl)}`);
-        const data = await res.json();
-
-        if (data.status && data.labels.length > 0) {
-          data.labels.forEach(label => {
-            const li = document.createElement("li");
-            li.textContent = label;
-            resultsList.appendChild(li);
-          });
-        } else {
-          resultsList.innerHTML = "<li>No objects detected.</li>";
-        }
-      } catch (err) {
-        resultsList.innerHTML = `<li>Error: ${err.message}</li>`;
-      }
-    }
-  </script>
+  <script src="/script.js"></script>
 </body>
 </html>
