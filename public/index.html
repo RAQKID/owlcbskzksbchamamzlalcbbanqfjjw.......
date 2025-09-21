@@ -4,7 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Object Detector</title>
-  <link rel="stylesheet" href="/style.css" />
+
+  <style>
+    /* Background Animation */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e3c72);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .input-group button {
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-group button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    #preview img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .output {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.85rem;
+      color: #ccc;
+    }
+
+    footer span {
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -24,6 +123,34 @@
     Powered by <span>Raqkid505</span>
   </footer>
 
-  <script src="/script.js"></script>
+  <script>
+    async function detectObject() {
+      const imageUrl = document.getElementById("imageUrl").value;
+      const preview = document.getElementById("preview");
+      const output = document.getElementById("output");
+
+      if (!imageUrl) {
+        output.innerHTML = "⚠️ Please enter an image URL!";
+        return;
+      }
+
+      // Show preview
+      preview.innerHTML = `<img src="${imageUrl}" alt="Preview" />`;
+      output.innerHTML = "🔍 Detecting...";
+
+      try {
+        const res = await fetch(`/api/detect?imageUrl=${encodeURIComponent(imageUrl)}`);
+        const data = await res.json();
+
+        if (data.status) {
+          output.innerHTML = "✅ Detected Objects: " + data.labels.join(", ");
+        } else {
+          output.innerHTML = "❌ Error: " + data.error;
+        }
+      } catch (err) {
+        output.innerHTML = "❌ Failed to connect to server.";
+      }
+    }
+  </script>
 </body>
-</html>
+  </html>
